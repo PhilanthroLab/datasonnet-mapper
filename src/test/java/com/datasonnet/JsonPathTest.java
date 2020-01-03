@@ -1,5 +1,6 @@
 package com.datasonnet;
 
+import com.datasonnet.document.StringDocument;
 import com.datasonnet.util.TestResourceReader;
 import com.datasonnet.Mapper;
 
@@ -16,7 +17,7 @@ public class JsonPathTest {
         String jsonData = TestResourceReader.readFileAsString("jsonPathTest.json");
 
         Mapper mapper = new Mapper("DS.JsonPath.select(payload, \"$..book[-2:]..author\")[0]", new ArrayList<>(), true);
-        String mappedJson = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/json").contents();
+        String mappedJson = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/json").getContents().toString();
 
         assertEquals(mappedJson, "\"Herman Melville\"");
     }
@@ -26,7 +27,7 @@ public class JsonPathTest {
         String jsonData = TestResourceReader.readFileAsString("jsonPathArrTest.json");
 
         Mapper mapper = new Mapper("std.length(DS.JsonPath.select(payload, \"$..language[?(@.name == 'Java')]\")) > 0", new ArrayList<>(), true);
-        String mappedJson = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/json").contents();
+        String mappedJson = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/json").getContents().toString();
 
         assertEquals(mappedJson, "true");
     }

@@ -1,7 +1,8 @@
-package com.datasonnet;
+package com.datasonnet.plugins;
 
 
 import com.datasonnet.badgerfish.*;
+import com.datasonnet.document.StringDocument;
 import com.datasonnet.spi.DataFormatPlugin;
 import com.datasonnet.spi.UjsonUtil;
 
@@ -47,12 +48,12 @@ public class XMLFormatPlugin implements DataFormatPlugin {
         System.setProperty("javax.xml.stream.XMLOutputFactory", "com.ctc.wstx.stax.WstxOutputFactory");
     }
 
-    public Value read(String inputXML, Map<String, Object> params) throws Exception {
+    public Value read(Object inputXML, Map<String, Object> params) throws Exception {
         if(params == null) {
             params = new HashMap<>();
         }
 
-        try(Reader input = new StringReader(inputXML);
+        try(Reader input = new StringReader(inputXML.toString());
             StringWriter output = new StringWriter();
             ) {
             XMLStreamReader2 reader = createInputStream(input);
@@ -65,7 +66,7 @@ public class XMLFormatPlugin implements DataFormatPlugin {
         }
     }
 
-    public String write(Value inputXML, Map<String, Object> params) throws Exception {
+    public StringDocument write(Value inputXML, Map<String, Object> params, String mimeType) throws Exception {
         JSONObject input = new JSONObject(UjsonUtil.jsonObjectValueTo(inputXML));
 
         if (params.containsKey(ROOT_ELEMENT)) {
@@ -91,7 +92,7 @@ public class XMLFormatPlugin implements DataFormatPlugin {
             XMLEventPipe pipe = new XMLEventPipe(reader, writer);
             pipe.pipe();
 
-            return output.toString();
+            return new StringDocument(output.toString(), mimeType);
         }
     }
 

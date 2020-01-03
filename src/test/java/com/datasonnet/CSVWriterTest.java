@@ -1,5 +1,7 @@
 package com.datasonnet;
 
+import com.datasonnet.document.Document;
+import com.datasonnet.document.StringDocument;
 import com.datasonnet.spi.DataFormatService;
 import com.datasonnet.util.TestResourceReader;
 import com.datasonnet.Mapper;
@@ -31,7 +33,7 @@ public class CSVWriterTest {
         Mapper mapper = new Mapper("payload", new ArrayList<>(), true);
         Document mapped = mapper.transform(data, new HashMap<>(), "application/csv");
         String expected = TestResourceReader.readFileAsString("writeCSVTest.csv");
-        assertEquals(expected.trim(), mapped.contents().trim());
+        assertEquals(expected.trim(), mapped.getContents().toString().trim());
     }
 
     @Test
@@ -45,7 +47,7 @@ public class CSVWriterTest {
         Mapper mapper = new Mapper(datasonnet, new ArrayList<>(), true);
         Document mapped = mapper.transform(data, new HashMap<>(), "application/csv");
         String expected = TestResourceReader.readFileAsString("writeCSVExtTest.csv");
-        assertEquals(expected.trim(), mapped.contents().trim());
+        assertEquals(expected.trim(), mapped.getContents().toString().trim());
     }
 
 }
