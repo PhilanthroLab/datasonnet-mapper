@@ -174,7 +174,7 @@ public class XMLWriterTest {
 
         Mapper mapper = new Mapper("DS.Formats.write(payload, \"application/xml\")", new ArrayList<>(), true);
         try {
-            String mappedXml = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/xml").contents();
+            String mappedXml = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/xml").getContents().toString();
             fail("Must fail to transform");
         } catch(IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("Object must have only one root element"), "Found message: " + e.getMessage());
@@ -186,7 +186,7 @@ public class XMLWriterTest {
                 "*/\n" +
                 "payload", new ArrayList<>(), true);
         try {
-            String mappedXml = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/xml").contents();
+            String mappedXml = mapper.transform(new StringDocument(jsonData, "application/json"), new HashMap<>(), "application/xml").getContents().toString();
         } catch(IllegalArgumentException e) {
             fail("This transformation should not fail");
         }
