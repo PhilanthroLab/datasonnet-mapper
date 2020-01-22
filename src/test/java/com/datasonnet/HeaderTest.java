@@ -7,8 +7,8 @@ import com.datasonnet.util.TestResourceReader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,8 +31,7 @@ public class HeaderTest {
         );
         String ds = TestResourceReader.readFileAsString("headerTest.ds");
 
-        HashMap<String, Document<?>> variables = new HashMap<>();
-        variables.put("myVar", myVar);
+        Map<String, Document<?>> variables = Collections.singletonMap("myVar", myVar);
 
         Mapper mapper = new Mapper(ds, variables.keySet(), true);
         String mapped = mapper.transform(payload, variables, "application/csv").getContents().toString();
@@ -49,11 +48,11 @@ public class HeaderTest {
         );
         String ds = TestResourceReader.readFileAsString("dotMimeTypeTest.ds");
 
-        Mapper mapper = new Mapper(ds, new ArrayList<>(), true);
-        String mapped = mapper.transform(payload, new HashMap<>(), "text/plain").getContents().toString();
-        assertTrue(mapped.endsWith("HelloWorld"));
-        mapped = mapper.transform(payload, new HashMap<>(), "application/test.test").getContents().toString();
-        assertTrue(mapped.endsWith("GoodByeWorld"));
+        Mapper mapper = new Mapper(ds, Collections.emptyList(), true);
+        String mapped = mapper.transform(payload, Collections.emptyMap(), "text/plain").getContents().toString();
+        assertEquals("HelloWorld", mapped);
+        mapped = mapper.transform(payload, Collections.emptyMap(), "application/test.test").getContents().toString();
+        assertEquals("GoodByeWorld", mapped);
     }
 
     @Test
@@ -64,10 +63,10 @@ public class HeaderTest {
         );
         String ds = TestResourceReader.readFileAsString("illegalParameter.ds");
 
-        Mapper mapper = new Mapper(ds, new ArrayList<>(), true);
+        Mapper mapper = new Mapper(ds, Collections.emptyList(), true);
 
         try {
-            String mapped = mapper.transform(payload, new HashMap<>(), "text/plain").getContents().toString();
+            String mapped = mapper.transform(payload, Collections.emptyMap(), "text/plain").getContents().toString();
             fail("Must fail to transform");
         } catch(IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("The parameter 'BadParam' not supported by plugin TEST"), "Found message: " + e.getMessage());
