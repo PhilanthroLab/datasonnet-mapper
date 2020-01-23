@@ -4,6 +4,7 @@ import com.datasonnet.document.Document;
 import com.datasonnet.document.StringDocument;
 import ujson.Value;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,12 +14,12 @@ public class TestFormatPlugin implements DataFormatPlugin {
 
     @Override
     public Value read(Object input, Map<String, Object> params) throws PluginException {
-        return UjsonUtil.stringValueOf("In 'read' Test Param Is " + params.get(TEST_PARAM));
+        return UjsonUtil.stringValueOf(params.get(TEST_PARAM).toString());
     }
 
     @Override
     public Document write(Value input, Map<String, Object> params, String mimeType) throws PluginException {
-        return new StringDocument("In 'write' Test Param Is " + params.get(TEST_PARAM), mimeType);
+        return new StringDocument(params.get(TEST_PARAM).toString(), mimeType);
     }
 
     @Override
@@ -28,9 +29,7 @@ public class TestFormatPlugin implements DataFormatPlugin {
 
     @Override
     public Map<String, String> getReadParameters() {
-        Map<String, String> readParams = new HashMap<>();
-        readParams.put(TEST_PARAM, "TestParameter");
-        return readParams;
+        return Collections.singletonMap(TEST_PARAM, "TestParameter");
     }
 
     @Override

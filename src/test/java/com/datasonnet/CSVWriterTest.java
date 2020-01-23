@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,8 +29,8 @@ public class CSVWriterTest {
                 "application/json"
         );
 
-        Mapper mapper = new Mapper("payload", new ArrayList<>(), true);
-        Document mapped = mapper.transform(data, new HashMap<>(), "application/csv");
+        Mapper mapper = new Mapper("payload", Collections.emptyList(), true);
+        Document mapped = mapper.transform(data, Collections.emptyMap(), "application/csv");
         String expected = TestResourceReader.readFileAsString("writeCSVTest.csv");
         assertEquals(expected.trim(), mapped.getContents().toString().trim());
     }
@@ -44,8 +43,8 @@ public class CSVWriterTest {
         );
         String datasonnet = TestResourceReader.readFileAsString("writeCSVExtTest.ds");
 
-        Mapper mapper = new Mapper(datasonnet, new ArrayList<>(), true);
-        Document mapped = mapper.transform(data, new HashMap<>(), "application/csv");
+        Mapper mapper = new Mapper(datasonnet, Collections.emptyList(), true);
+        Document mapped = mapper.transform(data, Collections.emptyMap(), "application/csv");
         String expected = TestResourceReader.readFileAsString("writeCSVExtTest.csv");
         assertEquals(expected.trim(), mapped.getContents().toString().trim());
     }
